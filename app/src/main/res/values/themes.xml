@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Pomilia"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/pomilia_primary</item>
+        <item name="colorSecondary">@color/pomilia_secondary</item>
+
+        <item name="android:windowBackground">
+            @color/pomilia_background
+        </item>
+
+    </style>
+
+    <style name="Theme.Pomilia" parent="Base.Theme.Pomilia" />
+</resources>
