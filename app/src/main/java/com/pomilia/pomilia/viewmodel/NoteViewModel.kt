@@ -1,64 +1,62 @@
 package com.pomilia.pomilia.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.pomilia.pomilia.model.Note
+import androidx.lifecycle.viewModelScope
+import com.pomilia.pomilia.data.local.NoteEntity
+import com.pomilia.pomilia.data.local.PomiliaDatabase
+import com.pomilia.pomilia.data.repository.NoteRepository
+import kotlinx.coroutines.launch
 
-class NoteViewModel : ViewModel() {
-    private var nextId = 3
+class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _notes = MutableLiveData<List<Note>>(
-        listOf(
-            Note(
-                1,
-                "Analisi 1",
-                "Limiti e derivate",
-                "Appunti",
-                "Matematica"
-            ),
-            Note(
-                2,
-                "Programmazione",
-                "Introduzione a Kotlin",
-                "Riassunti",
-                "Informatica"
-            )
-        )
-    )
+    private val repository: NoteRepository
 
+    val notes: LiveData<List<NoteEntity>>
+
+    init {
+        val noteDao = PomiliaDatabase
+            .getDatabase(application)
+            .noteDao()
+
+        repository = NoteRepository(noteDao)
+
+        notes = repository.notes
+    }
+
+    fun getNoteById(noteId: Int): LiveData<NoteEntity?>{
+        return  repository.getNoteById(noteId)
+    }
     fun addNote(
         title: String,
         content: String,
         category: String,
         subject: String
     ) {
-
-        val currentList = _notes.value?.toMutableList() ?: mutableListOf()
-
-        currentList.add(
-            Note(
-                id = nextId++,
+        viewModelScope.launch {
+            val note = NoteEntity(
                 title = title,
                 content = content,
                 category = category,
                 subject = subject
             )
-        )
 
-        _notes.value = currentList
+            repository.insertNote(note)
+        }
     }
 
-    // Funzione aggiunta per eliminare una nota dalla lista temporanea
-    fun deleteNote(note: Note) {
-        // 1. Recuperiamo la lista corrente come MutableList
-        val currentList = _notes.value?.toMutableList() ?: mutableListOf()
-
-        // 2. Rimuoviamo la nota passata come parametro
-        currentList.remove(note)
-
-        // 3. Notifichiamo gli osservatori (il Fragment) aggiornando il LiveData
-        _notes.value = currentList
+    fun updateNote(note: NoteEntity){
+        viewModelScope.launch {
+            repository.updateNote(note)
+        }
     }
-    val notes: LiveData<List<Note>> = _notes
+    fun deleteNote(note: NoteEntity) {
+        viewModelScope.launch {
+            repository.deleteNote(note)
+        }
+    }
+
+
+
 }

@@ -5,8 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
-    <!-- Diciamo alla navigazione che esiste una schermata chiamata "homeFragment"
-         e che fa riferimento alla classe HomeFragment che hai scritto in Kotlin -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.pomilia.pomilia.ui.home.HomeFragment"
@@ -15,14 +13,30 @@
 
         <action
             android:id="@+id/action_homeFragment_to_addNoteFragment"
-            app:destination="@id/addNoteFragment"/>
+            app:destination="@id/addNoteFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_detailNoteFragment"
+            app:destination="@id/detailNoteFragment" />
 
     </fragment>
+
     <fragment
         android:id="@+id/addNoteFragment"
         android:name="com.pomilia.pomilia.ui.add.AddNoteFragment"
         android:label="Nuova Nota"
-        tools:layout="@layout/fragment_add_note"/>
+        tools:layout="@layout/fragment_add_note" />
 
+    <fragment
+        android:id="@+id/detailNoteFragment"
+        android:name="com.pomilia.pomilia.ui.detail.DetailNoteFragment"
+        android:label="Dettaglio Nota"
+        tools:layout="@layout/fragment_detail_note">
+
+        <action
+            android:id="@+id/action_detailNoteFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
+
+    </fragment>
 
 </navigation>

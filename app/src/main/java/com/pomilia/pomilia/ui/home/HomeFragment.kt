@@ -36,10 +36,22 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Inizializziamo l'Adapter con una lista vuota e la logica di cancellazione
-        noteAdapter = NoteAdapter(emptyList()) { note ->
-            // Questo blocco viene eseguito quando viene cliccato il cestino nell'adapter
-            viewModel.deleteNote(note)
-        }
+        noteAdapter = NoteAdapter(
+            notesList = emptyList(),
+            onNoteClick = { note ->
+                val bundle = Bundle().apply {
+                    putInt("noteId", note.id)
+                }
+
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_detailNoteFragment,
+                    bundle
+                )
+            },
+            onDeleteClick = { note ->
+                viewModel.deleteNote(note)
+            }
+        )
 
         // Colleghiamo l'adapter al RecyclerView presente nel layout XML
         binding.recyclerViewNotes.adapter = noteAdapter
