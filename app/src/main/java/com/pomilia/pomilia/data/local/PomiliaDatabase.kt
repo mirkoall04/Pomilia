@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [NoteEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class PomiliaDatabase : RoomDatabase(){
@@ -23,7 +23,9 @@ abstract class PomiliaDatabase : RoomDatabase(){
                     context.applicationContext,
                     PomiliaDatabase::class.java,
                     "pomilia_database"
-                    ).build()
+                    )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 instance

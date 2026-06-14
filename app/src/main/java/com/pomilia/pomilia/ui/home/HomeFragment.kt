@@ -53,7 +53,13 @@ class HomeFragment : Fragment() {
                 )
             },
             onDeleteClick = { note ->
-                viewModel.deleteNote(note)
+                val sessionManager = SessionManager(requireContext())
+                val currentUsername = sessionManager.getUsername()
+
+                if (note.ownerUsername == currentUsername){
+                    viewModel.deleteNote(note)
+                }
+
             }
         )
 
@@ -80,6 +86,14 @@ class HomeFragment : Fragment() {
 
         quoteViewModel.loadQuote()
 
+        binding.buttonLogout.setOnClickListener {
+            val sessionManager = SessionManager(requireContext())
+            sessionManager.clearSession()
+
+            findNavController().navigate(
+                R.id.action_homeFragment_to_loginFragment
+            )
+        }
 
     }
     override fun onDestroyView() {

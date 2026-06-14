@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.pomilia.pomilia.databinding.FragmentDetailNoteBinding
 import com.pomilia.pomilia.viewmodel.NoteViewModel
 import com.pomilia.pomilia.R
+import com.pomilia.pomilia.security.SessionManager
 
 class DetailNoteFragment : Fragment() {
 
@@ -50,6 +51,15 @@ class DetailNoteFragment : Fragment() {
             binding.textDetailSubject.text = note.subject
             binding.textDetailCategory.text = note.category
             binding.textDetailContent.text = note.content
+
+            val sessionManager = SessionManager(requireContext())
+            val currentUsername =  sessionManager.getUsername()
+
+            if (note.ownerUsername == currentUsername){
+                binding.buttonEdit.visibility = View.VISIBLE
+            }else {
+                binding.buttonEdit.visibility = View.GONE
+            }
         }
 
         binding.buttonBack.setOnClickListener {

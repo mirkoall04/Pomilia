@@ -12,6 +12,7 @@ data class NoteEntity(
     val content: String,
     val category: String,
     val subject: String,
+    val ownerUsername: String,
 
 
 )

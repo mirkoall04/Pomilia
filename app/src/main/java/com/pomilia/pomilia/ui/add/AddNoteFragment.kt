@@ -22,6 +22,8 @@ class AddNoteFragment : Fragment() {
 
     private var noteId: Int = -1
 
+    private var currentNote: NoteEntity? = null
+
     private val categories = listOf(
         "Seleziona categoria",
         "Appunti",
@@ -158,7 +160,9 @@ class AddNoteFragment : Fragment() {
                 title = title,
                 content = content,
                 category = category,
-                subject = subject
+                subject = subject,
+                ownerUsername = currentNote?.ownerUsername ?: "unknown_user"
+
             )
 
             viewModel.updateNote(updatedNote)
