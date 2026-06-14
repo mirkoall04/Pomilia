@@ -12,6 +12,7 @@ import com.pomilia.pomilia.adapter.NoteAdapter
 import com.pomilia.pomilia.databinding.FragmentHomeBinding
 import com.pomilia.pomilia.viewmodel.NoteViewModel
 import com.pomilia.pomilia.R
+import com.pomilia.pomilia.security.SessionManager
 import com.pomilia.pomilia.viewmodel.QuoteViewModel
 
 class HomeFragment : Fragment() {
@@ -78,6 +79,8 @@ class HomeFragment : Fragment() {
         }
 
         quoteViewModel.loadQuote()
+
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
