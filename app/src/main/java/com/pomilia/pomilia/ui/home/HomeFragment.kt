@@ -12,6 +12,8 @@ import com.pomilia.pomilia.adapter.NoteAdapter
 import com.pomilia.pomilia.databinding.FragmentHomeBinding
 import com.pomilia.pomilia.viewmodel.NoteViewModel
 import com.pomilia.pomilia.R
+import com.pomilia.pomilia.viewmodel.QuoteViewModel
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -19,6 +21,7 @@ class HomeFragment : Fragment() {
 
     // Colleghiamo il ViewModel esistente usando la delega "by viewModels()"
     private val viewModel: NoteViewModel by activityViewModels()
+    private val quoteViewModel: QuoteViewModel by viewModels()
 
     // Dichiariamo l'adapter (inizialmente vuoto)
     private lateinit var noteAdapter: NoteAdapter
@@ -69,6 +72,12 @@ class HomeFragment : Fragment() {
             // Passiamo la nuova lista all'adapter per aggiornare lo schermo
             noteAdapter.updateData(listaDiNote)
         }
+
+        quoteViewModel.quote.observe(viewLifecycleOwner) { quote ->
+            binding.textQuote.text = quote
+        }
+
+        quoteViewModel.loadQuote()
     }
     override fun onDestroyView() {
         super.onDestroyView()
