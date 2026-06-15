@@ -1,16 +1,19 @@
 package com.pomilia.pomilia.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.pomilia.pomilia.databinding.FragmentDetailNoteBinding
-import com.pomilia.pomilia.viewmodel.NoteViewModel
 import com.pomilia.pomilia.R
+import com.pomilia.pomilia.databinding.FragmentDetailNoteBinding
 import com.pomilia.pomilia.security.SessionManager
+import com.pomilia.pomilia.viewmodel.NoteViewModel
 
 class DetailNoteFragment : Fragment() {
 
@@ -53,12 +56,25 @@ class DetailNoteFragment : Fragment() {
             binding.textDetailContent.text = note.content
 
             val sessionManager = SessionManager(requireContext())
-            val currentUsername =  sessionManager.getUsername()
+            val currentUsername = sessionManager.getUsername()
 
-            if (note.ownerUsername == currentUsername){
+            if (note.ownerUsername == currentUsername) {
                 binding.buttonEdit.visibility = View.VISIBLE
-            }else {
+            } else {
                 binding.buttonEdit.visibility = View.GONE
+            }
+
+            if (note.fileUri != null && note.fileName != null) {
+                binding.textAttachedFileLabel.visibility = View.VISIBLE
+                binding.buttonOpenFile.visibility = View.VISIBLE
+                binding.buttonOpenFile.text = "Apri: ${note.fileName}"
+
+                binding.buttonOpenFile.setOnClickListener {
+                    openAttachedFile(note.fileUri)
+                }
+            } else {
+                binding.textAttachedFileLabel.visibility = View.GONE
+                binding.buttonOpenFile.visibility = View.GONE
             }
         }
 
@@ -75,6 +91,25 @@ class DetailNoteFragment : Fragment() {
                 R.id.action_detailNoteFragment_to_addNoteFragment,
                 bundle
             )
+        }
+    }
+
+    private fun openAttachedFile(fileUri: String) {
+        val uri = Uri.parse(fileUri)
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "*/*")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        try {
+            startActivity(Intent.createChooser(intent, "Apri file con"))
+        } catch (exception: Exception) {
+            Toast.makeText(
+                requireContext(),
+                "Nessuna app disponibile per aprire questo file",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

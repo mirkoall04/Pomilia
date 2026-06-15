@@ -34,7 +34,9 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         title: String,
         content: String,
         category: String,
-        subject: String
+        subject: String,
+        fileUri: String?,
+        fileName: String?
     ) {
         viewModelScope.launch {
             val sessionManager = SessionManager(getApplication())
@@ -44,7 +46,9 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
                 content = content,
                 category = category,
                 subject = subject,
-                ownerUsername = username
+                ownerUsername = username,
+                fileUri = fileUri,
+                fileName = fileName
 
             )
 

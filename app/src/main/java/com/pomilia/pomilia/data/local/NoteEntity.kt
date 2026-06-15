@@ -2,7 +2,6 @@ package com.pomilia.pomilia.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import javax.security.auth.Subject
 
 @Entity(tableName = "notes")
 data class NoteEntity(
@@ -13,6 +12,9 @@ data class NoteEntity(
     val category: String,
     val subject: String,
     val ownerUsername: String,
+
+    val fileUri: String? = null,
+    val fileName: String? = null
 
 
 )
